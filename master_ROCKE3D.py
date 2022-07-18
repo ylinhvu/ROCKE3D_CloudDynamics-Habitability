@@ -6,27 +6,37 @@ import matplotlib.pyplot as plt
 
 from netCDF4 import Dataset
 
-def download_ROCKE3D(dimension,user_dir,searchfor,exclude):
-    # Scrape list of netCDF files from ROCKE-3D website
-    url = 'https://portal.nccs.nasa.gov/GISS_modelE/ROCKE-3D/publication-supplements/Climates_of_Warm_Earth_like_Planets_I/'+dimension
-    print('Searching in: ' + url)
-    print('Downloading to: ' + user_dir)
-    tables = pd.read_html(url,header=0, skiprows=2, keep_default_na=False)
-    table = tables[2]
+# def download_ROCKE3D(dimension,user_dir,searchfor,exclude):
+#         """
+#     This function scrapes and downloads ROCKE-3D simulations
     
-    # Filter files
-    new_table = table['Parent Directory']
-    for filters in searchfor:
-        new_table = new_table[new_table.str.contains(filters)]
-    for filters in exclude:
-        new_table = new_table[~new_table.str.contains(filters)]
-    filenames = new_table.tolist()
+#     Inputs:
+#     dimension - choose frome AIJ, AIJL, AJL, OIJ, etc.
+#     user_dir - directory where model outputs are kept e.g. 'C:/Users/ylinh/OneDrive - UW/Exoplanetary Atmospheres/AIJ/'
+#     searchfor - include keywords which contain the simulations you need (e.g., X128 for specific rotation rate)
+#     exclude - exclude certain keywords
     
-    # Download
-    for idx, file in enumerate(filenames):
-        download_url = url + file
-        print('Downloading: ' + file + ' (' + str(idx+1) + '/' + str(len(filenames)) + ')')
-        urllib.request.urlretrieve(download_url, user_dir+file)
+#     """
+#     # Scrape list of netCDF files from ROCKE-3D website
+#     url = 'https://portal.nccs.nasa.gov/GISS_modelE/ROCKE-3D/publication-supplements/Climates_of_Warm_Earth_like_Planets_I/'+dimension
+#     print('Searching in: ' + url)
+#     print('Downloading to: ' + user_dir)
+#     tables = pd.read_html(url,header=0, skiprows=2, keep_default_na=False)
+#     table = tables[2]
+    
+#     # Filter files
+#     new_table = table['Parent Directory']
+#     for filters in searchfor:
+#         new_table = new_table[new_table.str.contains(filters)]
+#     for filters in exclude:
+#         new_table = new_table[~new_table.str.contains(filters)]
+#     filenames = new_table.tolist()
+    
+#     # Download
+#     for idx, file in enumerate(filenames):
+#         download_url = url + file
+#         print('Downloading: ' + file + ' (' + str(idx+1) + '/' + str(len(filenames)) + ')')
+#         urllib.request.urlretrieve(download_url, user_dir+file)
     
 def open_ROCKE3D(path, filename, var):
     """
@@ -55,21 +65,21 @@ def open_ROCKE3D(path, filename, var):
     var1 = np.array(data[var])
     
     # Plotting
-    fig = plt.figure(figsize=(12,6))
-    ax = plt.axes(projection=ccrs.PlateCarree())
-    ax.grid(True)
-    c1 = ax.contourf(lonGrid, latGrid, var1, levels=np.linspace(np.min(var1), np.max(var1),1000), cmap='Spectral_r')
-    fig.colorbar(c1,label=(data[var].long_name +' ('+ data[var].units+')'), orientation="horizontal")
-    ax.coastlines()
-    ax.set_title(data[var].long_name)
+#     fig = plt.figure(figsize=(12,6))
+#     ax = plt.axes(projection=ccrs.PlateCarree())
+#     ax.grid(True)
+#     c1 = ax.contourf(lonGrid, latGrid, var1, levels=np.linspace(np.min(var1), np.max(var1),1000), cmap='Spectral_r')
+#     fig.colorbar(c1,label=(data[var].long_name +' ('+ data[var].units+')'), orientation="horizontal")
+#     ax.coastlines()
+#     ax.set_title(data[var].long_name)
     
-    data.close()
+#     data.close()
     
-#     return var1, latGrid, lonGrid
+    return var1, latGrid, lonGrid
 
 def open_zonal_ROCKE3D(path, filename, var):
     """
-    This function opens and plots ROCKE-3D netCDF files
+    This function...
     
     Inputs:
     path - directory where model outputs are kept e.g. 'C:/Users/ylinh/OneDrive - UW/Exoplanetary Atmospheres/AIJ/'
